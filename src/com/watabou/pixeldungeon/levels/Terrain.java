@@ -139,28 +139,23 @@ public class Terrain {
 			flags[i] = flags[WATER];
 		}
 	};
-	
+
+	private final static Map<Integer, Integer> discoverMap = Map.of(
+			SECRET_DOOR, DOOR,
+			SECRET_FIRE_TRAP, FIRE_TRAP,
+			SECRET_PARALYTIC_TRAP, PARALYTIC_TRAP,
+			SECRET_TOXIC_TRAP, TOXIC_TRAP,
+			SECRET_POISON_TRAP, POISON_TRAP,
+			SECRET_ALARM_TRAP, ALARM_TRAP,
+			SECRET_LIGHTNING_TRAP, LIGHTNING_TRAP,
+			SECRET_GRIPPING_TRAP, GRIPPING_TRAP,
+			SECRET_SUMMONING_TRAP, SUMMONING_TRAP
+	);
+
 	public static int discover( int terr ) {
-		switch (terr) {
-		case SECRET_DOOR:
-			return DOOR;
-		case SECRET_FIRE_TRAP:
-			return FIRE_TRAP;
-		case SECRET_PARALYTIC_TRAP:
-			return PARALYTIC_TRAP;
-		case SECRET_TOXIC_TRAP:
-			return TOXIC_TRAP;
-		case SECRET_POISON_TRAP:
-			return POISON_TRAP;
-		case SECRET_ALARM_TRAP:
-			return ALARM_TRAP;
-		case SECRET_LIGHTNING_TRAP:
-			return LIGHTNING_TRAP;
-		case SECRET_GRIPPING_TRAP:
-			return GRIPPING_TRAP;
-		case SECRET_SUMMONING_TRAP:
-			return SUMMONING_TRAP;
-		default:
+		try {
+			return discoverMap.get(terr);
+		} catch (NullPointerException e) {
 			return terr;
 		}
 	}
