@@ -570,114 +570,127 @@ public class Badges {
 			displayBadge( badge );
 		}
 	}
-	
-	public static void validateBossSlain() {
-		Badge badge = null;
-		switch (Dungeon.depth) {
-		case 5:
-			badge = Badge.BOSS_SLAIN_1;
-			break;
-		case 10:
-			badge = Badge.BOSS_SLAIN_2;
-			break;
-		case 15:
-			badge = Badge.BOSS_SLAIN_3;
-			break;
-		case 20:
-			badge = Badge.BOSS_SLAIN_4;
-			break;
-		}
-		
-		if (badge != null) {
-			local.add( badge );
-			displayBadge( badge );
-			
-			if (badge == Badge.BOSS_SLAIN_1) {
-				switch (Dungeon.hero.heroClass) {
-				case WARRIOR:
-					badge = Badge.BOSS_SLAIN_1_WARRIOR;
-					break;
-				case MAGE:
-					badge = Badge.BOSS_SLAIN_1_MAGE;
-					break;
-				case ROGUE:
-					badge = Badge.BOSS_SLAIN_1_ROGUE;
-					break;
-				case HUNTRESS:
-					badge = Badge.BOSS_SLAIN_1_HUNTRESS;
-					break;
-				}
-				local.add( badge );
-				if (!global.contains( badge )) {
-					global.add( badge );
-					saveNeeded = true;
-				}
-				
-				if (global.contains( Badge.BOSS_SLAIN_1_WARRIOR ) &&
-					global.contains( Badge.BOSS_SLAIN_1_MAGE ) &&
-					global.contains( Badge.BOSS_SLAIN_1_ROGUE ) &&
-					global.contains( Badge.BOSS_SLAIN_1_HUNTRESS)) {
-					
-					badge = Badge.BOSS_SLAIN_1_ALL_CLASSES;
-					if (!global.contains( badge )) {
-						displayBadge( badge );
-						global.add( badge );
-						saveNeeded = true;
-					}
-				}
-			} else
-			if (badge == Badge.BOSS_SLAIN_3) {
-				switch (Dungeon.hero.subClass) {
-				case GLADIATOR:
-					badge = Badge.BOSS_SLAIN_3_GLADIATOR;
-					break;
-				case BERSERKER:
-					badge = Badge.BOSS_SLAIN_3_BERSERKER;
-					break;
-				case WARLOCK:
-					badge = Badge.BOSS_SLAIN_3_WARLOCK;
-					break;
-				case BATTLEMAGE:
-					badge = Badge.BOSS_SLAIN_3_BATTLEMAGE;
-					break;
-				case FREERUNNER:
-					badge = Badge.BOSS_SLAIN_3_FREERUNNER;
-					break;
-				case ASSASSIN:
-					badge = Badge.BOSS_SLAIN_3_ASSASSIN;
-					break;
-				case SNIPER:
-					badge = Badge.BOSS_SLAIN_3_SNIPER;
-					break;
-				case WARDEN:
-					badge = Badge.BOSS_SLAIN_3_WARDEN;
-					break;
-				default:
-					return;
-				}
-				local.add( badge );
-				if (!global.contains( badge )) {
-					global.add( badge );
-					saveNeeded = true;
-				}
-				
-				if (global.contains( Badge.BOSS_SLAIN_3_GLADIATOR ) &&
-					global.contains( Badge.BOSS_SLAIN_3_BERSERKER ) &&
-					global.contains( Badge.BOSS_SLAIN_3_WARLOCK ) &&
-					global.contains( Badge.BOSS_SLAIN_3_BATTLEMAGE ) &&
-					global.contains( Badge.BOSS_SLAIN_3_FREERUNNER ) &&
-					global.contains( Badge.BOSS_SLAIN_3_ASSASSIN ) &&
-					global.contains( Badge.BOSS_SLAIN_3_SNIPER ) &&
-					global.contains( Badge.BOSS_SLAIN_3_WARDEN )) {
-					
-					badge = Badge.BOSS_SLAIN_3_ALL_SUBCLASSES;
-					if (!global.contains( badge )) {
-						displayBadge( badge );
-						global.add( badge );
-						saveNeeded = true;
-					}
-				}
+
+	private static Badge getBossSlainBadge() {
+		return switch (Dungeon.depth) {
+			case 5 -> Badge.BOSS_SLAIN_1;
+			case 10 -> Badge.BOSS_SLAIN_2;
+			case 15 -> Badge.BOSS_SLAIN_3;
+			case 20 -> Badge.BOSS_SLAIN_4;
+			default -> null;
+		};
+	}
+
+	private static Badge getClassBadgeBoss1() {
+		return switch (Dungeon.hero.heroClass) {
+			case WARRIOR -> Badge.BOSS_SLAIN_1_WARRIOR;
+			case MAGE -> Badge.BOSS_SLAIN_1_MAGE;
+			case ROGUE -> Badge.BOSS_SLAIN_1_ROGUE;
+			case HUNTRESS -> Badge.BOSS_SLAIN_1_HUNTRESS;
+		};
+	}
+
+	private static Badge getSubclassBadgeBoss3() {
+		return switch (Dungeon.hero.subClass) {
+			case GLADIATOR -> Badge.BOSS_SLAIN_3_GLADIATOR;
+			case BERSERKER -> Badge.BOSS_SLAIN_3_BERSERKER;
+			case WARLOCK -> Badge.BOSS_SLAIN_3_WARLOCK;
+			case BATTLEMAGE -> Badge.BOSS_SLAIN_3_BATTLEMAGE;
+			case FREERUNNER -> Badge.BOSS_SLAIN_3_FREERUNNER;
+			case ASSASSIN -> Badge.BOSS_SLAIN_3_ASSASSIN;
+			case SNIPER -> Badge.BOSS_SLAIN_3_SNIPER;
+			case WARDEN -> Badge.BOSS_SLAIN_3_WARDEN;
+			default -> null;
+		};
+	}
+
+	private static boolean allClassesSlainBoss1() {
+		List<Badge> classBadges = Arrays.asList(
+				Badge.BOSS_SLAIN_1_WARRIOR,
+				Badge.BOSS_SLAIN_1_MAGE,
+				Badge.BOSS_SLAIN_1_ROGUE,
+				Badge.BOSS_SLAIN_1_HUNTRESS
+		);
+
+		for (Badge badge : classBadges) {
+			if (!global.contains(badge)) {
+				return false;
 			}
+		}
+
+		return true;
+	}
+
+	private static boolean allSubclassesSlainBoss3() {
+		List<Badge> subclassBadges = Arrays.asList(
+				Badge.BOSS_SLAIN_3_GLADIATOR,
+				Badge.BOSS_SLAIN_3_BERSERKER,
+				Badge.BOSS_SLAIN_3_WARLOCK,
+				Badge.BOSS_SLAIN_3_BATTLEMAGE,
+				Badge.BOSS_SLAIN_3_FREERUNNER,
+				Badge.BOSS_SLAIN_3_ASSASSIN,
+				Badge.BOSS_SLAIN_3_SNIPER,
+				Badge.BOSS_SLAIN_3_WARDEN
+		);
+
+		for (Badge badge : subclassBadges) {
+			if (!global.contains(badge)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private static void addBadgeToGlobal(Badge badge, Boolean shouldDisplay) {
+		if (!global.contains(badge)) {
+			if (shouldDisplay) {
+				displayBadge(badge);
+			}
+			global.add(badge);
+			saveNeeded = true;
+		}
+	}
+
+	private static void handleBoss1Badge() {
+		Badge badge = getClassBadgeBoss1();
+
+		local.add(badge);
+		addBadgeToGlobal(badge, false);
+
+		if (allClassesSlainBoss1()) {
+			badge = Badge.BOSS_SLAIN_1_ALL_CLASSES;
+			addBadgeToGlobal(badge, true);
+		}
+	}
+
+	private static void handleBoss3Badge() {
+		Badge badge = getSubclassBadgeBoss3();
+
+		if (badge == null)
+			return;
+
+		local.add(badge);
+		addBadgeToGlobal(badge, false);
+
+		if (allSubclassesSlainBoss3()) {
+			badge = Badge.BOSS_SLAIN_3_ALL_SUBCLASSES;
+			addBadgeToGlobal(badge, true);
+		}
+	}
+
+	public static void validateBossSlain() {
+		Badge badge = getBossSlainBadge();
+
+		if (badge == null)
+			return;
+
+		local.add(badge);
+		displayBadge(badge);
+
+		switch (badge) {
+			case BOSS_SLAIN_1 -> handleBoss1Badge();
+			case BOSS_SLAIN_3 -> handleBoss3Badge();
 		}
 	}
 	
