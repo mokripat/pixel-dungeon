@@ -320,7 +320,7 @@ public class Yog extends Mob {
 		
 		@Override
 		protected boolean canAttack( Char enemy ) {
-			return Ballistica.cast( pos, enemy.pos, false, true ) == enemy.pos;
+			return Ballistica.canHitChar(pos, enemy.pos);
 		}
 		
 		@Override

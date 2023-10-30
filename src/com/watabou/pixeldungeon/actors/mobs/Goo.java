@@ -119,7 +119,7 @@ public class Goo extends Mob {
 				
 				// Pumped up attack WITH accuracy penalty
 				jumped = true;
-				if (Ballistica.cast( pos, enemy.pos, false, true ) == enemy.pos) {
+				if (Ballistica.canHitChar(pos, enemy.pos)) {
 					final int dest = Ballistica.trace[Ballistica.distance - 2];
 					
 					Callback afterJump = new Callback() {
