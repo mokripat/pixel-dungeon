@@ -41,7 +41,15 @@ import com.watabou.utils.Random;
 public class Eye extends Mob {
 	
 	private static final String TXT_DEATHGAZE_KILLED = "%s's deathgaze killed you...";
-	
+
+	private static final float DEFAULT_ATTACK_DELAY = 1.6f;
+
+	private static final String DEMON_DESCRIPTION = "One of this demon's other names is \"orb of hatred\", because when it sees an enemy, " +
+			"it uses its deathgaze recklessly, often ignoring its allies and wounding them.";
+	private static final int DEFAULT_ATTACK_SKILL = 30;
+
+	private static final int DEFAULT_DR_VALUE = 10;
+
 	{
 		name = "evil eye";
 		spriteClass = EyeSprite.class;
@@ -58,12 +66,12 @@ public class Eye extends Mob {
 		loot = new Dewdrop();
 		lootChance = 0.5f;
 	}
-	
+
 	@Override
 	public int dr() {
-		return 10;
+		return DEFAULT_DR_VALUE;
 	}
-	
+
 	private int hitCell;
 	
 	@Override
@@ -71,17 +79,16 @@ public class Eye extends Mob {
 		hitCell = Ballistica.cast( pos, enemy.pos, true, false );
 		return Ballistica.canAttack(enemy);
 	}
-	
 	@Override
-	public int attackSkill( Char target ) {
-		return 30;
+	public int attackSkill(Char target) {
+		return DEFAULT_ATTACK_SKILL;
 	}
-	
+
 	@Override
 	protected float attackDelay() {
-		return 1.6f;
+		return DEFAULT_ATTACK_DELAY;
 	}
-	
+
 	@Override
 	protected boolean doAttack( Char enemy ) {
 
@@ -135,14 +142,13 @@ public class Eye extends Mob {
 		
 		return true;
 	}
-	
+
 	@Override
 	public String description() {
-		return
-			"One of this demon's other names is \"orb of hatred\", because when it sees an enemy, " +
-			"it uses its deathgaze recklessly, often ignoring its allies and wounding them.";
+		return DEMON_DESCRIPTION;
 	}
-	
+
+
 	private static final HashSet<Class<?>> RESISTANCES = new HashSet<Class<?>>();
 	static {
 		RESISTANCES.add( WandOfDisintegration.class );
